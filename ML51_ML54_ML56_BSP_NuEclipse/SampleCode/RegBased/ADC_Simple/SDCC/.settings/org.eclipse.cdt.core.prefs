@@ -1,0 +1,6 @@
+eclipse.preferences.version=1
+environment/project/cdt.managedbuild.config.sdcc.exe.release.805237074/PATH/delimiter=;
+environment/project/cdt.managedbuild.config.sdcc.exe.release.805237074/PATH/operation=replace
+environment/project/cdt.managedbuild.config.sdcc.exe.release.805237074/PATH/value=C\:\\Program Files (x86)\\Nuvoton Tools\\Toolchain\\SDCC\\bin;C\:\\Program Files (x86)\\GNU ARM Eclipse\\Build Tools\\2.8-201611221915\\bin;C\:\\Program Files (x86)\\GNU Arm Embedded Toolchain\\10 2021.10\\bin
+environment/project/cdt.managedbuild.config.sdcc.exe.release.805237074/append=true
+environment/project/cdt.managedbuild.config.sdcc.exe.release.805237074/appendContributed=true
