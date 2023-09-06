@@ -109,9 +109,22 @@ __endasm
 __asm             \
 nop               \
 __endasm
-/*******************************************************************************
-*   POR/LVR/BOD Define
-********************************************************************************/
+
+/*****************************************************************************/
+/*   Software reset                                                          */
+/*****************************************************************************/
+#define    ENABLE_SOFTWARE_RESET_TO_APROM    clr_CHPCON_BS;set_CHPCON_SWRST
+#define    ENABLE_SOFTWARE_RESET_TO_LDROM    set_CHPCON_BS;set_CHPCON_SWRST
+
+/*****************************************************************************/
+/*   Power down / idle mode define                                           */
+/*****************************************************************************/
+#define    POWERDOWN_MODE_ENABLE    set_PCON_PD
+#define    IDLE_MODE_ENABLE         set_PCON_IDLE
+
+/*****************************************************************************/
+/*   POR/LVR/BOD Define                                                      */
+/*****************************************************************************/
 #define    ENABLE_VBOD18                       SFRS=1;DMA0CR|=0x08    
 
 #define    ENABLE_BOD                          set_BODCON0_BODEN
@@ -128,9 +141,10 @@ __endasm
 
 #define    ENABLE_POR                          SFRS=1;BIT_TMP=EA;EA=0;TA=0xAA;TA=0x55;PORDIS=0x00;EA=BIT_TMP;
 #define    DISABLE_POR                         SFRS=1;BIT_TMP=EA;EA=0;TA=0xAA;TA=0x55;PORDIS=0x5A;TA=0xAA;TA=0x55;PORDIS=0xA5;EA=BIT_TMP
-/******************************************************************************************
-* IAP function process 
-*****************************************************************************************/
+
+/*****************************************************************************/
+/*   IAP function process                                                    */
+/*****************************************************************************/
 #define     READ_CID                0x0B
 #define     READ_DID                0x0C
 #define     READ_UID                0x04
@@ -162,12 +176,11 @@ __endasm
 
 #define     PAGE_SIZE               128
 
-/*****************************************************************************************
-*interrupt function process 
-*****************************************************************************************/
+/*****************************************************************************/
+/*   Interrupt function process                                              */
+/*****************************************************************************/
 #define    ENABLE_GLOBAL_INTERRUPT     EA=1
 #define    DISABLE_GLOBAL_INTERRUPT    EA=0
-
 #define    ENABLE_ADC_INTERRUPT         set_IE_EADC
 #define    ENABLE_BOD_INTERRUPT         set_IE_EBOD
 #define    ENABLE_UART0_INTERRUPT       set_IE_ES
@@ -175,7 +188,6 @@ __endasm
 #define    ENABLE_INT1_INTERRUPT        set_IE_EX1
 #define    ENABLE_TIMER0_INTERRUPT      set_IE_ET0
 #define    ENABLE_INT0_INTERRUPT        set_IE_EX0
-
 #define    ENABLE_TIMER2_INTERRUPT      set_EIE0_ET2
 #define    ENABLE_SPI0_INTERRUPT        set_EIE0_ESPI0
 #define    ENABLE_PWM0_FB_INTERRUPT     set_EIE0_EFB0  
@@ -184,7 +196,6 @@ __endasm
 #define    ENABLE_CAPTURE_INTERRUPT     set_EIE0_ECAP  
 #define    ENABLE_PIN_INTERRUPT         set_EIE0_EPI  
 #define    ENABLE_I2C_INTERRUPT         set_EIE0_EI2C0
-
 #define    ENABLE_PWM1_INTERRUPT        set_EIE1_EPWM123
 #define    ENABLE_I2C1_INTERRUPT        set_EIE1_EI2C1
 #define    ENABLE_ESPI1_INTERRUPT       set_EIE1_ESPI1
@@ -192,19 +203,16 @@ __endasm
 #define    ENABLE_WKT_INTERRUPT         set_EIE1_EWKT
 #define    ENABLE_TIMER3_INTERRUPT      set_EIE1_ET3
 #define    ENABLE_UART1_INTERRUPT       set_EIE1_ES1
-
 #define    ENABLE_SC0_AUTO_CONVENTION_ERROR_INTERRUPT    set_SC0IE_ACERRIEN
 #define    ENABLE_SC0_BLOCK_GUARD_TIMER_INTERRUPT        set_SC0IE_BGTIEN
 #define    ENABLE_SC0_TRANSFER_ERROR_INTERRUPT           set_SC0IE_TERRIEN
 #define    ENABLE_SC0_TRASMIT_BUFFER_EMPTY_INTERRUPT     set_SC0IE_TBEIEN
 #define    ENABLE_SC0_RECEIVE_DATA_REACH_INTERRUPT       set_SC0IE_RDAIEN
-
 #define    ENABLE_SC1_AUTO_CONVENTION_ERROR_INTERRUPT    SFRS=2;SC1IE|=0x10
 #define    ENABLE_SC1_BLOCK_GUARD_TIMER_INTERRUPT        SFRS=2;SC1IE|=0x08
 #define    ENABLE_SC1_TRANSFER_ERROR_INTERRUPT           SFRS=2;SC1IE|=0x04
 #define    ENABLE_SC1_TRASMIT_BUFFER_EMPTY_INTERRUPT     SFRS=2;SC1IE|=0x02
 #define    ENABLE_SC1_RECEIVE_DATA_REACH_INTERRUPT       SFRS=2;SC1IE|=0x01
-
 #define    ENABLE_PDMA0_HALFDONE_INT          SFRS=0;DMA0CR|=0x08
 #define    ENABLE_PDMA0_FULLDONE_INT          SFRS=0;DMA0CR|=0x04
 #define    ENABLE_PDMA1_HALFDONE_INT          SFRS=0;DMA1CR|=0x08
@@ -213,11 +221,40 @@ __endasm
 #define    ENABLE_PDMA2_FULLDONE_INT          SFRS=2;DMA2CR|=0x04
 #define    ENABLE_PDMA3_HALFDONE_INT          SFRS=2;DMA3CR|=0x08
 #define    ENABLE_PDMA3_FULLDONE_INT          SFRS=2;DMA3CR|=0x04 
-
 #define    ENABLE_ACMP0_INTERRUPT             set_ACMPCR0_ACMPIE
 #define    ENABLE_ACMP1_INTERRUPT             set_ACMPCR1_ACMPIE
-
 #define    ENABLE_LCD_INTERRUPT               set_LCDCON1_LCDIE
+
+/* Clear Interrupt Flag */
+#define    CLEAR_ADC_INTERRUPT_FLAG          clr_ADCCON0_ADCF
+#define    CLEAR_BOD_INTERRUPT_FLAG          clr_BODCON0_BOF
+#define    CLEAR_BOD_RESET_FLAG              clr_BODCON0_BORF
+#define    CLEAR_UART0_INTERRUPT_TX_FLAG     clr_SCON_TI
+#define    CLEAR_UART0_INTERRUPT_RX_FLAG     clr_SCON_RI
+#define    CLEAR_TIMER1_INTERRUPT_FLAG       clr_TCON_TF1
+#define    CLEAR_INT1_INTERRUPT_FLAG         clr_TCON_IE1
+#define    CLEAR_TIMER0_INTERRUPT_FLAG       clr_TCON_TF0
+#define    CLEAR_INT0_INTERRUPT_FLAG         clr_TCON_IE0
+#define    CLEAR_TIMER2_INTERRUPT_FLAG       clr_T2CON_TF2
+#define    CLEAR_SPI0_INTERRUPT_FLAG         clr_SPSR_SPIF
+#define    CLEAR_PWM0_FB_INTERRUPT_FLAG      clr_PWM0FBD_FBF
+#define    CLEAR_WDT_INTERRUPT_FLAG          clr_WDCON_WDTF
+#define    CLEAR_PWM0_INTERRUPT_FLAG         clr_PWM1CON0_PWMF
+#define    CLEAR_CAPTURE_INTERRUPT_IC0_FLAG  clr_CAPCON0_CAPF0
+#define    CLEAR_CAPTURE_INTERRUPT_IC1_FLAG  clr_CAPCON0_CAPF1
+#define    CLEAR_CAPTURE_INTERRUPT_IC2_FLAG  clr_CAPCON0_CAPF2
+#define    CLEAR_PIN_INTERRUPT_PIT0_FLAG     clr_PIF_PIF0
+#define    CLEAR_PIN_INTERRUPT_PIT1_FLAG     clr_PIF_PIF1
+#define    CLEAR_PIN_INTERRUPT_PIT2_FLAG     clr_PIF_PIF2
+#define    CLEAR_PIN_INTERRUPT_PIT3_FLAG     clr_PIF_PIF3
+#define    CLEAR_PIN_INTERRUPT_PIT4_FLAG     clr_PIF_PIF4
+#define    CLEAR_PIN_INTERRUPT_PIT5_FLAG     clr_PIF_PIF5
+#define    CLEAR_PIN_INTERRUPT_PIT6_FLAG     clr_PIF_PIF6
+#define    CLEAR_PIN_INTERRUPT_PIT7_FLAG     clr_PIF_PIF7
+#define    CLEAR_I2C_TIMEOUT_INTERRUPT_FLAG  clr_I2TOC_I2TOF
+#define    CLEAR_WKT_INTERRUPT_FLAG          clr_WKCON_WKTF
+#define    CLEAR_TIMER3_INTERRUPT_FLAG       clr_T3CON_TF3
+#define    CLEAR_UART1_INTERRUPT_FLAG        clr_EIE1_ES_1
 
 /*DISABLE INTERRUPT*/ 
 #define    DISABLE_ADC_INTERRUPT         clr_IE_EADC
@@ -227,7 +264,6 @@ __endasm
 #define    DISABLE_INT1_INTERRUPT        clr_IE_EX1
 #define    DISABLE_TIMER0_INTERRUPT      clr_IE_ET0
 #define    DISABLE_INT0_INTERRUPT        clr_IE_EX0
-
 #define    DISABLE_TIMER2_INTERRUPT      clr_EIE0_ET2
 #define    DISABLE_SPI0_INTERRUPT        clr_EIE0_ESPI0 
 #define    DISABLE_PWM0_FB_INTERRUPT     clr_EIE0_EFB0  
@@ -236,7 +272,6 @@ __endasm
 #define    DISABLE_CAPTURE_INTERRUPT     clr_EIE0_ECAP  
 #define    DISABLE_PIN_INTERRUPT         clr_EIE0_EPI  
 #define    DISABLE_I2C_INTERRUPT         clr_EIE0_EI2C0
-
 #define    DISABLE_PWM1_INTERRUPT        clr_EIE1_EPWM123
 #define    DISABLE_I2C1_INTERRUPT        clr_EIE1_EI2C1
 #define    DISABLE_ESPI1_INTERRUPT       clr_EIE1_ESPI1
@@ -244,19 +279,16 @@ __endasm
 #define    DISABLE_WKT_INTERRUPT         clr_EIE1_EWKT
 #define    DISABLE_TIMER3_INTERRUPT      clr_EIE1_ET3
 #define    DISABLE_UART1_INTERRUPT       clr_EIE1_ES1
-
 #define    DISABLE_SC0_AUTO_CONVENTION_ERROR_INTERRUPT    SFRS=0;SC0IE&=0xEF
 #define    DISABLE_SC0_BLOCK_GUARD_TIMER_INTERRUPT        SFRS=0;SC0IE&=0xF7
 #define    DISABLE_SC0_TRANSFER_ERROR_INTERRUPT           SFRS=0;SC0IE&=0xFB
 #define    DISABLE_SC0_TRASMIT_BUFFER_EMPTY_INTERRUPT     SFRS=0;SC0IE&=0xFD
 #define    DISABLE_SC0_RECEIVE_DATA_REACH_INTERRUPT       SFRS=0;SC0IE&=0xFE
-
 #define    DISABLE_SC1_AUTO_CONVENTION_ERROR_INTERRUPT    SFRS=2;SC1IE&=0xEF
 #define    DISABLE_SC1_BLOCK_GUARD_TIMER_INTERRUPT        SFRS=2;SC1IE&=0xF7
 #define    DISABLE_SC1_TRANSFER_ERROR_INTERRUPT           SFRS=2;SC1IE&=0xFB
 #define    DISABLE_SC1_TRASMIT_BUFFER_EMPTY_INTERRUPT     SFRS=2;SC1IE&=0xFD
 #define    DISABLE_SC1_RECEIVE_DATA_REACH_INTERRUPT       SFRS=2;SC1IE&=0xFE
-          
 #define    DISABLE_PDMA0_HALFDONE_INT                     SFRS=0;DMA0CR&=0xF7
 #define    DISABLE_PDMA0_FULLDONE_INT                     SFRS=0;DMA0CR&=0xFB
 #define    DISABLE_PDMA1_HALFDONE_INT                     SFRS=0;DMA1CR&=0xF7
@@ -265,14 +297,13 @@ __endasm
 #define    DISABLE_PDMA2_FULLDONE_INT                     SFRS=2;DMA2CR&=0xFB
 #define    DISABLE_PDMA3_HALFDONE_INT                     SFRS=2;DMA3CR&=0xF7
 #define    DISABLE_PDMA3_FULLDONE_INT                     SFRS=2;DMA3CR&=0xFB
-
 #define    DISABLE_ACMP0_INTERRUPT                        clr_ACMPCR0_ACMPIE
 #define    DISABLE_ACMP1_INTERRUPT                        clr_ACMPCR1_ACMPIE
-
 #define    DISABLE_LCD_INTERRUPT                          clr_LCDCON1_LCDIE
-/*******************************************************************************
-*   TIMER Function Define
-********************************************************************************/
+
+/*****************************************************************************/
+/*   TIMER Function Define                                                   */
+/*****************************************************************************/
 #define    ENABLE_CLOCK_OUT                      set_CKCON_CLOEN;
 /*-------------------- Timer0 basic define --------------------*/
 #define    ENABLE_TIMER0_MODE0                   SFRS=0;TMOD&=0xF0
@@ -437,10 +468,9 @@ __endasm
 #define    TIMER_DIV512_VALUE_500ms_FOSC_240000    65536-23437      //4687*512/24000000 = 500 ms       // Timer divider = 512
 #define    TIMER_DIV512_VALUE_1s_FOSC_240000       65536-46875      //46875*512/24000000 = 1 s.        // Timer Divider = 512
 
-
-/*****************************************************************************************
-* For PWM setting 
-*****************************************************************************************/
+/*****************************************************************************/
+/*   PWM setting                                                             */
+/*****************************************************************************/
 /*--------- PMW clock source select define ---------------------*/
 #define    PWM_CLOCK_FSYS                   SFRS=0;CKCON&=0xBF
 #define    PWM_CLOCK_TIMER1                 SFRS=0;CKCON|=0x40
@@ -663,9 +693,9 @@ __endasm
 #define    PWM3_CH0_INTERRUPT_SELECT          SFRS=2;PWM3INTC&=0xF8
 #define    PWM3_CH1_INTERRUPT_SELECT          SFRS=2;PWM3INTC&=0xF8;PWM3INTC|=0x01
 
-/*****************************************************************************************
-* For ADC setting 
-*****************************************************************************************/
+/*****************************************************************************/
+/*   ADC setting                                                             */
+/*****************************************************************************/
 /*---- ADC input setting , disable digital function & enable ADC -------*/
 #define    ENABLE_ADC_CH0                     MFP_P25_ADC_CH0;P25_INPUT_MODE;SFRS=1;AINDIDS0=0;AINDIDS0|=0x01;SFRS=0;ADCCON0&=0xF0;ADCCON0|=0x00;ADCCON1|=0x01
 #define    ENABLE_ADC_CH1                     MFP_P24_ADC_CH1;P24_INPUT_MODE;SFRS=1;AINDIDS0=0;AINDIDS0|=0x02;SFRS=0;ADCCON0&=0xF0;ADCCON0|=0x01;ADCCON1|=0x01
@@ -742,9 +772,9 @@ __endasm
 /*------ ADC disable ------*/
 #define    DISABLE_ADC                        SFRS=0;ADCCON1&=0xFE
 
-/****************************************************************************
-  ACMP function define
-***************************************************************************/
+/*****************************************************************************/
+/*   ACMP setting                                                            */
+/*****************************************************************************/
 #define    ENABLE_ACMP0_POSSELP25_NEGSELP24   SFRS=0;ACMPCR0&=0x0F;ACMPCR0|=0x01
 #define    ENABLE_ACMP0_POSSELP25_NEGSELCRV   SFRS=0;ACMPCR0&=0x0F;ACMPCR0|=0x11;SFRS=1;ACMPCR2|=0x01
 #define    ENABLE_ACMP0_POSSELP25_NEGSELVBG   SFRS=0;ACMPCR0&=0x0F;ACMPCR0|=0x21
@@ -792,9 +822,10 @@ __endasm
 #define    DISABLE_ACMP1_PD_WAKEUP            SFRS=0;ACMPCR1&=0xF7
 #define    ACMP1_OUTPUT_INVERSE               SFRS=1;ACMPCR2|=0x20
 #define    ACMP1_OUTPUT_NORMAL                SFRS=1;ACMPCR2&=0xDF
-/*****************************************************************************************
-* For PDMA setting 
-*****************************************************************************************/
+
+/*****************************************************************************/
+/*   PDMA setting                                                            */
+/*****************************************************************************/
 /*----- PDMA0 -----*/
 #define    PDMA0_XRAM_TO_XRAM                 SFRS=0;DMA0CR&=0x0E
 #define    PDMA0_SPI0RX_TO_XRAM               SFRS=0;DMA0CR&=0x0E;DMA0CR|=0x10;SFRS=1;SPI0CR1|=0x04
@@ -834,10 +865,11 @@ __endasm
 #define    PDMA3_SC0TX_TO_XRAM                SFRS=2;DMA3CR&=0x0E;DMA3CR|=0x60                         
 #define    PDMA3_SPI1TX_TO_XRAM               SFRS=2;DMA3CR&=0x0E;DMA3CR|=0x70;SFRS=0;SPI1CR1|=0x08
 #define    PDMA3_HALFDONE_INT_ENABLE          SFRS=2;DMA3CR|=0x08
-#define    PDMA3_FULLDONE_INT_ENABLE          SFRS=2;DMA3CR|=0x04 
-/*****************************************************************************************
-* For SPI setting 
-*****************************************************************************************/
+#define    PDMA3_FULLDONE_INT_ENABLE          SFRS=2;DMA3CR|=0x04
+ 
+/*****************************************************************************/
+/*   SPI setting                                                             */
+/*****************************************************************************/
 /*---- SPI0 ------*/
 #define    SPI0_MASTER_MODE                   SFRS=0;SPI0CR0|=0x10;SPI0CR0|=0x40
 #define    SPI0_SLAVE_MODE                    SFRS=0;SPI0CR0&=0xEF;SPI0CR0|=0x40
@@ -895,25 +927,25 @@ __endasm
 #define    SPI1_CLOCK_DIV_192                 SFRS=0;SPI1CR1|=0x30;SPI1CR0&=0xFC;SPI1CR0|=0x02
 #define    SPI1_CLOCK_DIV_384                 SFRS=0;SPI1CR1|=0x30;SPI1CR0&=0xFC;SPI1CR0|=0x03
 
-/*****************************************************************************************
-* For I2C setting 
-*****************************************************************************************/
+/*****************************************************************************/
+/*   I2C setting                                                             */
+/*****************************************************************************/
 #define    ENABLE_I2C0_HOLDTIME_EXTEND        SFRS=0;I2C0CON|=0x80
 #define    DISABLE_I2C0_HOLDTIME_EXTEND       SFRS=0;I2C0CON&=0x7F
 #define    ENABLE_I2C1_HOLDTIME_EXTEND        SFRS=0;I2C1CON|=0x80
 #define    DISABLE_I2C1_HOLDTIME_EXTEND       SFRS=0;I2C1CON&=0x7F
 
-/*****************************************************************************************
-* For UART0 and UART1 and printf funcion 
-*****************************************************************************************/
+/*****************************************************************************/
+/*   UART0 / UART1 setting                                                   */
+/*****************************************************************************/
 #define    ENABLE_UART0_PRINTF                set_SCON_TI;UART0PRINTFG=1            //For printf function must setting TI = 1
 #define    DISABLE_UART0_PRINTF               clr_SCON_TI;UART0PRINTFG=0
 #define    ENABLE_UART1_PRINTF                set_S1CON_TI_1;UART1PRINTFG=1
 #define    DISABLE_UART1_PRINTF               clr_S1CON_TI_1;UART1PRINTFG=0
 
-/*****************************************************************************************
-* For RTC setting       Must call  RTC_RWEN(); before any setting so SFRS not setting first
-*****************************************************************************************/
+/*****************************************************************************/
+/*   RTC setting                                                             */
+/*****************************************************************************/
 #define    RTC_TICK_DIV_1                     SFRS=3;RTC_RWEN;RTCTICK=0
 #define    RTC_TICK_DIV_2                     SFRS=3;RTC_RWEN;RTCTICK=1
 #define    RTC_TICK_DIV_4                     SFRS=3;RTC_RWEN;RTCTICK=2
@@ -923,9 +955,9 @@ __endasm
 #define    RTC_TICK_DIV_64                    SFRS=3;RTC_RWEN;RTCTICK=6
 #define    RTC_TICK_DIV_128                   SFRS=3;RTC_RWEN;RTCTICK=7
 
-/*****************************************************************************************
-* For LCD setting 
-*****************************************************************************************/
+/*****************************************************************************/
+/*   LCD setting                                                             */
+/*****************************************************************************/
 #define    ENABLE_LCD                         set_LCDCON_LCDEN;
 #define    DISABLE_LCD                        clr_LCDCON_LCDEN;
 
@@ -937,10 +969,9 @@ __endasm
 #define    ENABLE_LCD_6COM                    SFRS=3;LCDCON&=0xF3;LCDCON|=0x04;
 #define    ENABLE_LCD_8COM                    SFRS=3;LCDCON&=0xF3;LCDCON|=0x08;
 
-
-/*****************************************************************************************
-* For GPIO Multi-function Pin Setting
-*****************************************************************************************/
+/*****************************************************************************/
+/*   GPIO Multi-function Pin Setting                                         */
+/*****************************************************************************/
 /*----- ------ ------ P0 MFP ------ ------ ------*/
 /* P0.0 */  /* Mapping == PA0 */
 #define    MFP_P00_GPIO                    SFRS=2;P0MF10&=0xF0         /*!<  P0.0 MFP setting for GPIO       */ 
@@ -1366,9 +1397,9 @@ __endasm
                                            P6MF10=0;P6MF32=0;P6MF54=0;P6MF76=0;\
                                            SFRS=0; 
  
-/*****************************************************************************************
-*  GPIO Mode setting 
-*****************************************************************************************/
+/*****************************************************************************/
+/*   GPIO MODE setting                                                       */
+/*****************************************************************************/
 //------------------- Define Port as Quasi mode  -------------------
 #define    P00_QUASI_MODE          SFRS=1;P0M1&=0xFE;P0M2&=0xFE
 #define    P01_QUASI_MODE          SFRS=1;P0M1&=0xFD;P0M2&=0xFD
@@ -1850,9 +1881,9 @@ __endasm
 #define    DISABLE_P66_PULLDOWN    SFRS=2;P6DW&=0xBF
 #define    DISABLE_P67_PULLDOWN    SFRS=2;P6DW&=0x7F
 
-/****************************************************************************
-    PIN interrupt define
-***************************************************************************/
+/*****************************************************************************/
+/*   PIN interrupt setting                                                   */
+/*****************************************************************************/
 //---------------- Pin interrupt channel 0 PIT0 ------------------------
 #define    ENABLE_PIT0_P00_LOWLEVEL      SFRS=1;PICON&=0xFE;PINEN|=0x01;PIPEN&=0xFE;PIPS0=0x00
 #define    ENABLE_PIT0_P01_LOWLEVEL      SFRS=1;PICON&=0xFE;PINEN|=0x01;PIPEN&=0xFE;PIPS0=0x01
@@ -6438,14 +6469,22 @@ __endasm
 /*---------------- Pin interrupt all GPIO DISABLE ------------------------ */
 #define    DISABLE_ALL_PIT                  SFRS=1;PICON=0;PINEN=0;PIPEN=0;DISABLE_PIN_INTERRUPT
 
-/*****************************************************************************************
-* INT0 setting
-*****************************************************************************************/
+/*****************************************************************************/
+/*   INT0 interrupt setting                                                  */
+/*****************************************************************************/
 #define INT0_FALLING_EDGE_TRIG    set_TCON_IT0
 #define INT0_LOW_LEVEL_TRIG       clr_TCON_IT0
 
-/*****************************************************************************************
-* INT1 setting
-*****************************************************************************************/
+/*****************************************************************************/
+/*   INT1 interrupt setting                                                  */
+/*****************************************************************************/
 #define INT1_FALLING_EDGE_TRIG    set_TCON_IT1
 #define INT1_LOW_LEVEL_TRIG       clr_TCON_IT1
+
+/*****************************************************************************/
+/*   WDT setting                                                             */
+/*****************************************************************************/
+#define    WDT_RUN_IN_POWERDOWN_ENABLE        set_WDCON_WIDPD
+#define    WDT_RUN_IN_POWERDOWN_DISABLE       clr_WDCON_WIDPD
+#define    WDT_COUNTER_CLEAR                  set_WDCON_WDCLR
+#define    WDT_COUNTER_RUN                    set_WDCON_WDTR

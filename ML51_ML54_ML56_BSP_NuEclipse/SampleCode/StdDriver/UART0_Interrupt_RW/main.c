@@ -4,17 +4,13 @@
 /* Copyright(c) 2020 Nuvoton Technology Corp. All rights reserved.                                         */
 /*                                                                                                         */
 /*---------------------------------------------------------------------------------------------------------*/
-
-/***********************************************************************************************************/
-/*   File Function: ML51 UART0 receive and transmit loop test                                              */
-/***********************************************************************************************************/
 #include "ml51_sdcc.h"
 
 //#define  UART0_TX_only
 #define  UART0_RXTX_loop
 
 
-void UART0_ISR (void) __interrupt (4);         // Vector @  0x23
+void UART0_ISR (void) __interrupt (4)         // Vector @  0x23
 {
     PUSH_SFRS;
     if (RI)

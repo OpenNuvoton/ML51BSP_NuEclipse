@@ -4,7 +4,6 @@
 /* Copyright(c) 2020 Nuvoton Technology Corp. All rights reserved.                                         */
 /*                                                                                                         */
 /*---------------------------------------------------------------------------------------------------------*/
-
 #include "ml51_sdcc.h"
 
 /* When Temperatue 25C, temperature voltage = 675mV, 1.83mV /per C */

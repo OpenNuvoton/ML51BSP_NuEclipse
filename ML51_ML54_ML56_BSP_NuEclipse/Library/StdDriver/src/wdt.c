@@ -72,3 +72,16 @@ void WDT_Interrupt(unsigned char u8WDTINT)
     }
 }
 
+/**
+ * @brief       Watchdog Clear Counter process
+ * @param       none
+ * @return      none
+ * @details     none
+ * @note        none
+ * @example     WDT_Clear();
+ */
+void WDT_Clear(void)
+{
+      WDT_COUNTER_CLEAR;                  /* Clear WDT counter */
+      while(WDCON&SET_BIT6);              /* Check for the WDT counter cleared */
+}

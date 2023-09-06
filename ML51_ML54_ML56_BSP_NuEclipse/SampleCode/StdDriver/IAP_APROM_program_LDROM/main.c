@@ -4,7 +4,6 @@
 /* Copyright(c) 2020 Nuvoton Technology Corp. All rights reserved.                                         */
 /*                                                                                                         */
 /*---------------------------------------------------------------------------------------------------------*/
-
 #include "ml51_sdcc.h"
 
 /**
@@ -15,21 +14,6 @@
  * @note         PLEASE CONFIRM ENABLE CONFIG AREA FIRST BERFORE PROGRAM LDROM.
  * @note        BOD reset maybe cause IAP process error. Disable BOD reset function and enable BOD interrupt to check and reset. 
  */
-
-//#define  BOR_Enabled_in_CONFIG
-
-#ifdef  BOR_Enabled_in_CONFIG
-void BOD_ISR (void) __interrupt (8)           // Vector @  0x43
-{
-
-    TA=0xAA;TA=0x55;IAPUEN=0;         //Disable all Write enable
-    clr_CHPCON_IAPEN;
-    clr_BODCON0_BOF;                  //clear BOD flag
-    set_CHPCON_SWRST;                 //Software reset
-}
-#endif
-
-
 void main (void) 
 {
     unsigned char datatemp,count;
@@ -38,14 +22,9 @@ void main (void)
     Enable_UART0_VCOM_printf();
     printf ("\n Test start ...");
     
-#ifdef BOR_Enabled_in_CONFIG
-    ENABLE_BOD_INTERRUPT;
-    DISABLE_BOD_RESET;
-#endif
-
-    MFP_P46_GPIO;
-    P46_INPUT_MODE;
-    while(P46);                              //loop here while P46 = 1;
+    LED_GPIO_MODE;
+    GPIO_LED_QUASI_MODE;
+    while(GPIO_LED);                              //loop here while P46 = 1;
   
     for(count=0;count<128;count++)          // define buffer data
     {

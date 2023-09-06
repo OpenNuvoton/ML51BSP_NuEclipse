@@ -15,20 +15,6 @@
  * @note        PLEASE always confirm the DATAFLASH area not overlap the APROM code. Since all APROM code can be erased no configuration limitation.
  * @note        BOD reset maybe cause IAP process error. Disable BOD reset function and enable BOD interrupt to check and reset. 
  */
-
-
-//#define  BOR_Enabled_in_CONFIG
-
-#ifdef  BOR_Enabled_in_CONFIG
-void BOD_ISR (void) __interrupt (8)           // Vector @  0x43
-{
-    TA=0xAA;TA=0x55;IAPUEN=0;         //Disable all Write enable
-    clr_CHPCON_IAPEN;
-    clr_BODCON0_BOF;                  //clear BOD flag
-    set_CHPCON_SWRST;                 //Software reset
-}
-#endif
-
 void main (void) 
 {
     unsigned char count;
@@ -37,9 +23,9 @@ void main (void)
     printf ("\n Test start ...");
 
 /* Loop while P46 not connect to GND */ 
-    MFP_P32_GPIO;
-    P32_QUASI_MODE;
-    while(P32);
+    LED_GPIO_MODE;
+    GPIO_LED_QUASI_MODE;
+    while(GPIO_LED);
 /* define buffer data */
     for(count=0;count<128;count++)
     {
@@ -50,10 +36,6 @@ void main (void)
    * include IAP.c in Library for IAP function
    * @note  now maxima buffer size for program is 128 byte. buffer is locate in XRAM please check iap.h IAPDataBuf[128] define.
 */
-#ifdef BOR_Enabled_in_CONFIG
-    ENABLE_BOD_INTERRUPT;
-    DISABLE_BOD_RESET;
-#endif
     APROM_Erase(0x6000,128);
     APROM_Blank_Check(0x6000,2048);
     APROM_Program(0x6000,128);

@@ -8,6 +8,7 @@ extern unsigned char __xdata UCIDBuffer[12];
 extern unsigned char __xdata IAPDataBuf[128];
 extern unsigned char __xdata IAPCFBuf[5];
 extern unsigned char __xdata CHECKSUMBuf[1];
+extern BIT  ConfigModifyFlag;
 
 void LDROM_Erase(unsigned int u16IAPStartAddress, unsigned int u16IAPDataSize);
 void LDROM_Blank_Check(unsigned int u16IAPStartAddress, unsigned int u16IAPDataSize);
@@ -17,6 +18,8 @@ void APROM_Erase(unsigned int u16IAPStartAddress, unsigned int u16IAPDataSize);
 void APROM_Blank_Check(unsigned int u16IAPStartAddress, unsigned int u16IAPDataSize);
 void APROM_Program(unsigned int u16IAPStartAddress, unsigned int u16IAPDataSize);
 void APROM_Read_Verify(unsigned int u16IAPStartAddress, unsigned int u16IAPDataSize);
+void Modify_CONFIG(unsigned char u8CF0,unsigned char u8CF1,unsigned char u8CF2,unsigned char u8CF3,unsigned char u8CF4);
+void Read_CONFIG(void);
 void UID_Read(void);
 void UCID_Read(void);
 void DID_Read(void);

@@ -39,6 +39,7 @@
 #include "rtc.h"
 #include "spi.h"
 #include "sys.h"
+#include "timer.h"
 #include "trimlirc.h"
 #include "uart.h"
 #include "uart2.h"

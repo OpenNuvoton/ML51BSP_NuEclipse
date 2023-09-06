@@ -46,8 +46,8 @@ void I2C0_ISR (void) __interrupt (6)           // Vector @  0x33
 /*=====  I2C master tranfer to eeprom process  ===========================*/
 void I2C0_Master_Tx_Isr(void)
 {
-    static uint8_t addr_flag = 0;
-    static uint8_t u8Count = 0;
+    static uint8_t addr_flag;
+    static uint8_t u8Count;
 
 PUSH_SFRS;
     SFRS = 0;
@@ -101,8 +101,8 @@ POP_SFRS;
 /*======== I2C master read from eeprom process======================================*/
 void I2C0_Master_Rx_Isr(void)
 {
-    static uint8_t addr_flag = 0;
-    static uint8_t u8Count = 0;
+	static uint8_t addr_flag;
+	static uint8_t u8Count;
 PUSH_SFRS;
 
     SFRS = 0;

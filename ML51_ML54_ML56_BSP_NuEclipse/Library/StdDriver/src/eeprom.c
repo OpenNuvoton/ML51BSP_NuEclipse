@@ -12,7 +12,7 @@
 volatile unsigned char __xdata page_buffer[128];
 volatile unsigned char __xdata xd_tmp[128];
 
-
+unsigned char WriteDataToOnePage(unsigned int u16_addr, const unsigned char *pDat, unsigned char num);
 /**
  * @brief       Write Dataflash as EEPROM,
  * @param       u16EPAddr the 16bit EEPROM start address. Any of APROM address can be defined as start address (0x3800)
@@ -66,27 +66,7 @@ void Write_DATAFLASH_BYTE(unsigned int u16EPAddr, unsigned char u8EPData)
 }
 
 
-//-------------------------------------------------------------------------
-void Write_DATAFLASH_ARRAY(unsigned int u16_addr, unsigned char *pDat, unsigned int num)
-{
-    unsigned char CPageAddr, EPageAddr, cnt;
-    CPageAddr = u16_addr >> 7;
-    EPageAddr = (u16_addr + num) >> 7;
 
-    while (CPageAddr != EPageAddr)
-    {
-        cnt = WriteDataToOnePage(u16_addr, pDat, 128);
-        u16_addr += cnt;
-        pDat += cnt;
-        num -= cnt;
-        CPageAddr = u16_addr >> 7;
-    }
-
-    if (num)
-    {
-        WriteDataToOnePage(u16_addr, pDat, num);
-    }
-}
 //-------------------------------------------------------------------------
 void Read_DATAFLASH_ARRAY(unsigned int u16_addr, unsigned char *pDat, unsigned int num)
 {
@@ -180,4 +160,26 @@ WriteDataToPage20:
     clr_CHPCON_IAPEN;
 
     return num;
+}
+
+//-------------------------------------------------------------------------
+void Write_DATAFLASH_ARRAY(unsigned int u16_addr, unsigned char *pDat, unsigned int num)
+{
+    unsigned char CPageAddr, EPageAddr, cnt;
+    CPageAddr = u16_addr >> 7;
+    EPageAddr = (u16_addr + num) >> 7;
+
+    while (CPageAddr != EPageAddr)
+    {
+        cnt = WriteDataToOnePage(u16_addr, pDat, 128);
+        u16_addr += cnt;
+        pDat += cnt;
+        num -= cnt;
+        CPageAddr = u16_addr >> 7;
+    }
+
+    if (num)
+    {
+        WriteDataToOnePage(u16_addr, pDat, num);
+    }
 }

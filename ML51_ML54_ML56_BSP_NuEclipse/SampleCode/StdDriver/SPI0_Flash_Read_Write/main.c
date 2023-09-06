@@ -20,6 +20,8 @@
 #define SPI_CMD_READ_STATUS1    0x05
 
 #define SPI0_SS_PIN             P03   /* also copy this define in spi.h */
+
+
 /***************************************************/
 void SPI_Error(void)
 {
